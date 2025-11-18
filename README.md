@@ -80,3 +80,6 @@ Idées d'améliorations possibles :
 🔦 Détection de passage piéton / panneaux routiers
 🌦️ Détection d’obstacles en extérieur
 🎛 Interface utilisateur améliorée
+📝 Licence
+Projet open-source sous licence MIT.
+Vous êtes libre de l’utiliser, modifier ou améliorer.
