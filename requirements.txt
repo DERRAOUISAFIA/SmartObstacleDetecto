@@ -1,23 +1,19 @@
-os
-pytesseract
-pytorch
-pyttsx3
-numpy 
-tensoflow
-tarfile
-zipfile
-time
-engineio
+# ======================
+# Core Dependencies
+# ======================
+tensorflow==2.15.0
+numpy==1.26.4
+protobuf==4.24.4
+Pillow
 matplotlib
-opencv
-Protobuf 3.0.0
-Python-tk
-Pillow 1.0
-lxml
-tf-slim
-slim
-Jupyter notebook
-Matplotlib
-Cython
-contextlib2
-cocoapi
+opencv-python
+
+# ======================
+# Speech (text-to-speech)
+# ======================
+pyttsx3
+
+# ======================
+# Optional (used in notebooks)
+# ======================
+jupyter

@@ -1,0 +1,27 @@
+# Environnements virtuels
+venv/
+env/
+ENV/
+blindenv/
+*.virtualenv
+
+# Dossiers système Mac
+.DS_Store
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Cache TensorFlow
+*.pbtxt
+*.pbmm
+*.tflite
+
+# Logs
+*.log
+
+# Téléchargements / archives
+*.tar.gz
+*.zip
