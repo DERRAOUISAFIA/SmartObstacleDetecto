@@ -66,23 +66,30 @@ Aucune installation externe nécessaire
 object_detection_speaking.py → détection + voix
 object_detection_webcam.py → détection seule
 📁 Structure du projet
+
 Blind-Assistance-Object-Detection/
 │
-├── object_detection_speaking.py
-├── object_detection_webcam.py
+├── object_detection_speaking.py # Détection + retour vocal
+├── object_detection_webcam.py # Détection seule
 │
-├── ssd_mobilenet_v2/
-│   ├── saved_model.pb
-│   └── variables/
-│       ├── variables.data-00000-of-00001
-│       └── variables.index
+├── ssd_mobilenet_v2/ # Modèle TensorFlow 2 inclus
+│ ├── saved_model.pb
+│ └── variables/
+│ ├── variables.data-00000-of-00001
+│ └── variables.index
 │
-├── requirements.txt
-└── README.md
-⚙️ Installation
-🔹 1. Cloner le projet
-git clone https://github.com/<votre-username>/<votre-repo>.git
-cd Blind-Assistance-Object-Detection
+├── requirements.txt # Dépendances
+└── README.md # Documentation
+
+---
+
+## ⚙️ Installation
+
+### 🔹 1. Cloner le projet
+```bash
+git clone https://github.com/DERRAOUISAFIA/SmartObstacleDetecto.git
+cd SmartObstacleDetecto
+
 🔹 2. Créer un environnement virtuel
 macOS / Linux :
 python3 -m venv blindenv
@@ -98,31 +105,15 @@ python object_detection_speaking.py
 🎥 Détection seule
 python object_detection_webcam.py
 ❌ Quitter
-Dans la fenêtre vidéo, appuyer sur Q.
+Dans la fenêtre vidéo : appuyer sur la touche Q.
 🧬 Modèle utilisé
-🔹 SSD MobileNet V2 – COCO dataset
-90 classes d’objets supportées
-Très rapide → approprié pour traitement temps réel
-Modèle complet inclus directement dans le repo
-Fonctionne sur CPU (aucun GPU nécessaire)
+SSD MobileNet V2 – COCO dataset (90 classes)
+Très rapide → idéal pour temps réel
+Modèle complet inclus dans le dépôt
 🛠️ Technologies utilisées
 Technologie	Rôle
 TensorFlow 2.15	Détection d’objets
 OpenCV	Webcam & affichage vidéo
-NumPy	Traitement d’images/matrices
-pyttsx3	Synthèse vocale offline
+NumPy	Traitement des matrices
+pyttsx3	Synthèse vocale locale (offline)
 Python 3.10+	Langage du projet
-🧑‍🏫 Contexte académique
-Ce projet a été réalisé dans le cadre :
-d’un module académique sur l’intelligence artificielle,
-visant l’intégration de modèles pré-entraînés TensorFlow,
-la manipulation d’une webcam en temps réel,
-et la création d’un prototype d’assistance pour malvoyants.
-📌 Travaux futurs
-📱 Développement d’une application mobile
-🧭 Détection de distance / alertes (ultrasons / stéréo-vision)
-🔦 Détection de passages piétons
-⚠️ Détection d’obstacles extérieurs
-🎛 Interface utilisateur améliorée
-📄 Licence
-Ce projet est publié sous licence MIT.
