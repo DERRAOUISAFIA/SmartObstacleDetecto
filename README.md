@@ -1,45 +1,44 @@
-# 🌟 Blind Assistance – Real-Time Object Detection with Voice Feedback
+# 🌟 Blind Assistance – Real-Time Object Detection with Voice Feedback  
 ### *Projet académique – Vision par Ordinateur & Intelligence Artificielle*
 
 ---
 
 ## 🧠 Description du Projet
 
-Ce projet propose un système d’assistance pour personnes malvoyantes, capable de :
+Ce projet propose un système d’assistance pour personnes malvoyantes capable de :
 
-- détecter des objets en temps réel via une webcam,
-- annoncer vocalement les éléments identifiés,
-- afficher les objets détectés grâce à OpenCV.
+- détecter des objets en temps réel via webcam,  
+- annoncer vocalement les objets détectés,  
+- afficher les boîtes englobantes via OpenCV.
 
-Il utilise **TensorFlow 2**, **OpenCV**, et un modèle pré-entraîné **SSD MobileNet V2**, optimisé pour la rapidité.  
-Ce projet a été développé dans un cadre **académique**, afin de présenter un prototype fonctionnel devant un jury.
+La solution repose sur **TensorFlow 2**, **OpenCV**, et un modèle pré-entraîné **SSD MobileNet V2**, optimisé pour la rapidité.  
+Ce projet est réalisé dans le cadre d’un **projet académique** afin de présenter un prototype fonctionnel devant un jury.
 
 ---
 
 ## 🚀 Fonctionnalités principales
 
 ### 🎥 Détection d’objets en temps réel
-- Basée sur **SSD MobileNet V2**  
-- 90 classes COCO supportées  
-- Résultats rapides (idéal webcam)
+- Basée sur **SSD MobileNet V2 (COCO – 90 classes)**  
+- Résultats rapides → idéal pour webcam  
+- Affichage en temps réel (bounding boxes + labels)
 
 ### 🔊 Synthèse vocale automatique
-- Annonce l’objet détecté (ex: “person ahead”)  
-- Système anti-répétition intégré (évite les boucles de voix)
+- Annonce de l’objet détecté (ex : *“person ahead”*)  
+- Système anti-répétition pour éviter la surcharge vocale  
+- Fonctionne **offline** via `pyttsx3`
 
 ### 📦 Modèle embarqué
-- Modèle TensorFlow inclus dans le dossier `ssd_mobilenet_v2/`
-- Fonctionne offline
-- Exécution immédiate sans téléchargement externe
+- Le modèle TensorFlow est déjà inclus dans `ssd_mobilenet_v2/`  
+- Aucun téléchargement supplémentaire nécessaire
 
 ### 🖥 Scripts disponibles
 - `object_detection_speaking.py` → détection + voix  
-- `object_detection_webcam.py` → détection seule  
+- `object_detection_webcam.py` → détection uniquement  
 
 ---
 
 ## 📁 Structure du projet
-
 
 Blind-Assistance-Object-Detection/
 │
@@ -63,7 +62,6 @@ Blind-Assistance-Object-Detection/
 ```bash
 git clone https://github.com/DERRAOUISAFIA/SmartObstacleDetecto.git
 cd SmartObstacleDetecto
-
 🔹 2. Créer un environnement virtuel
 macOS / Linux :
 python3 -m venv blindenv
@@ -91,3 +89,15 @@ OpenCV	Webcam & affichage vidéo
 NumPy	Traitement des matrices
 pyttsx3	Synthèse vocale locale (offline)
 Python 3.10+	Langage du projet
+🧑‍🏫 Contexte académique
+Ce projet a été réalisé dans le cadre d’un module visant :
+l'utilisation de modèles pré-entraînés TensorFlow,
+la manipulation d'une webcam en temps réel,
+l’intégration d’une synthèse vocale,
+la création d’un prototype d’assistance pour malvoyants.
+📌 Travaux futurs
+📱 Application mobile
+🧭 Détection de distance (ultrasons / stéréo-vision)
+🔦 Détection de passages piétons
+⚠️ Détection d’obstacles extérieurs
+🎛 Interface utilisateur améliorée
