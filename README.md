@@ -1,82 +1,82 @@
-# 🌟 Blind Assistance -- Real-Time Object Detection with Voice Feedback
+\# 🌟 Blind Assistance -- Real-Time Object Detection with Voice Feedback
 
-### *Projet académique -- Vision par Ordinateur & Intelligence Artificielle*
+\### \*Projet académique -- Vision par Ordinateur & Intelligence Artificielle\*
 
----
+\---
 
-## 🧠 Description du Projet
+\## 🧠 Description du Projet
 
 Ce projet propose un système d'assistance pour personnes malvoyantes capable de :
 
-- détecter des objets en temps réel via webcam,
+\- détecter des objets en temps réel via webcam,
 
-- annoncer vocalement les objets identifiés,
+\- annoncer vocalement les objets identifiés,
 
-- afficher les boîtes englobantes grâce à OpenCV.
+\- afficher les boîtes englobantes grâce à OpenCV.
 
-Il repose sur **TensorFlow 2**, **OpenCV**, et le modèle pré-entraîné **SSD MobileNet V2**.
+Il repose sur \*\*TensorFlow 2\*\*, \*\*OpenCV\*\*, et le modèle pré-entraîné \*\*SSD MobileNet V2\*\*.
 
-Développé dans le cadre d'un **projet académique**, il vise à présenter un prototype fonctionnel devant un jury.
+Développé dans le cadre d'un \*\*projet académique\*\*, il vise à présenter un prototype fonctionnel devant un jury.
 
----
+\---
 
-## 🚀 Fonctionnalités principales
+\## 🚀 Fonctionnalités principales
 
-### 🎥 Détection d'objets en temps réel
+\### 🎥 Détection d'objets en temps réel
 
-- Basée sur **SSD MobileNet V2 -- COCO**
+\- Basée sur \*\*SSD MobileNet V2 -- COCO\*\*
 
-- 90 classes d'objets supportées
+\- 90 classes d'objets supportées
 
-- Fonctionne en temps réel (selon la machine)
+\- Fonctionne en temps réel (selon la machine)
 
-### 🔊 Synthèse vocale automatique
+\### 🔊 Synthèse vocale automatique
 
-- Annonce vocale de chaque objet détecté
+\- Annonce vocale de chaque objet détecté
 
-- Anti-répétition intégré (évite les interférences audio)
+\- Anti-répétition intégré (évite les interférences audio)
 
-- Fonctionne entièrement offline (`pyttsx3`)
+\- Fonctionne entièrement offline (\`pyttsx3\`)
 
-### 📦 Modèle inclus dans le projet
+\### 📦 Modèle inclus dans le projet
 
-Le dossier `ssd_mobilenet_v2/` contient :
+Le dossier \`ssd\_mobilenet\_v2/\` contient :
 
-- `saved_model.pb`
+\- \`saved\_model.pb\`
 
-- `variables/`
+\- \`variables/\`
 
 Aucun téléchargement supplémentaire n'est nécessaire.
 
-### 🖥 Scripts disponibles
+\### 🖥 Scripts disponibles
 
 | Script | Fonction |
 
 |--------|----------|
 
-| `object_detection_speaking.py` | Détection + annonce vocale |
+| \`object\_detection\_speaking.py\` | Détection + annonce vocale |
 
-| `object_detection_webcam.py` | Détection seule |
+| \`object\_detection\_webcam.py\` | Détection seule |
 
----
+\---
 
-## 📁 Structure du projet
+\## 📁 Structure du projet
 
-```text
+\`\`\`text
 
 Blind-Assistance-Object-Detection/
 
 │
 
-├── object_detection_speaking.py # Détection + Voix
+├── object\_detection\_speaking.py # Détection + Voix
 
-├── object_detection_webcam.py # Détection seule
+├── object\_detection\_webcam.py # Détection seule
 
 │
 
-├── ssd_mobilenet_v2/ # Modèle TensorFlow 2
+├── ssd\_mobilenet\_v2/ # Modèle TensorFlow 2
 
-│ ├── saved_model.pb
+│ ├── saved\_model.pb
 
 │ └── variables/
 
@@ -110,7 +110,7 @@ Windows
 
 python -m venv blindenv
 
-blindenv\Scripts\activate
+blindenv\\Scripts\\activate
 
 🔷 3. Installer les dépendances
 
@@ -120,11 +120,11 @@ pip install -r requirements.txt
 
 🔊 Détection + Synthèse vocale
 
-python object_detection_speaking.py
+python object\_detection\_speaking.py
 
 🎥 Détection seule (sans voix)
 
-python object_detection_webcam.py
+python object\_detection\_webcam.py
 
 ❌ Quitter
 
