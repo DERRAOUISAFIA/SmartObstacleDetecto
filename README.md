@@ -54,51 +54,56 @@ Blind-Assistance-Object-Detection/
 ├── requirements.txt # Dépendances
 └── README.md # Documentation
 
+
 ---
 
-## ⚙️ Installation
+# ⚙️ Installation
 
-### 🔹 1. Cloner le projet
+## 🔹 1. Cloner le projet
+
 ```bash
 git clone https://github.com/DERRAOUISAFIA/SmartObstacleDetecto.git
 cd SmartObstacleDetecto
 
 🔹 2. Créer un environnement virtuel
-macOS / Linux :
+
+macOS / Linux
+
 python3 -m venv blindenv
 source blindenv/bin/activate
-Windows :
+
+Windows
 python -m venv blindenv
 blindenv\Scripts\activate
 🔹 3. Installer les dépendances
 pip install -r requirements.txt
 ▶️ Exécution
-🔊 Détection + synthèse vocale
+🔊 Détection + synthèse vocale (mode principal)
 python object_detection_speaking.py
-🎥 Détection seule
+🎥 Détection seule (sans voix)
 python object_detection_webcam.py
 ❌ Quitter
-Dans la fenêtre vidéo : appuyer sur la touche Q.
+Dans la fenêtre vidéo → appuyer sur Q
 🧬 Modèle utilisé
 SSD MobileNet V2 – COCO dataset (90 classes)
-Très rapide → idéal pour temps réel
-Modèle complet inclus dans le dépôt
-🛠️ Technologies utilisées
+Très rapide → idéal temps réel
+Modèle pré-extrait fourni dans le repo
+🛠 Technologies utilisées
 Technologie	Rôle
 TensorFlow 2.15	Détection d’objets
 OpenCV	Webcam & affichage vidéo
-NumPy	Traitement des matrices
-pyttsx3	Synthèse vocale locale (offline)
+NumPy	Traitement d’images
+pyttsx3	Synthèse vocale offline
 Python 3.10+	Langage du projet
 🧑‍🏫 Contexte académique
-Ce projet a été réalisé dans le cadre d’un module visant :
-l'utilisation de modèles pré-entraînés TensorFlow,
-la manipulation d'une webcam en temps réel,
-l’intégration d’une synthèse vocale,
-la création d’un prototype d’assistance pour malvoyants.
+Ce projet s’inscrit dans un module d’intelligence artificielle portant sur :
+la vision par ordinateur en temps réel,
+l’utilisation de modèles pré-entraînés TensorFlow,
+l’assistance intelligente aux utilisateurs,
+la construction d’un prototype fonctionnel.
 📌 Travaux futurs
 📱 Application mobile
 🧭 Détection de distance (ultrasons / stéréo-vision)
 🔦 Détection de passages piétons
-⚠️ Détection d’obstacles extérieurs
+🌦 Détection d’obstacles extérieurs
 🎛 Interface utilisateur améliorée
