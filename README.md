@@ -41,32 +41,6 @@ Ce projet a été développé dans un cadre **académique**, afin de présenter 
 ## 📁 Structure du projet
 
 
-🌟 Blind Assistance – Real-Time Object Detection with Voice Feedback
-Projet académique – Vision par Ordinateur & Intelligence Artificielle
-🧠 Description du Projet
-Ce projet propose un système d’assistance pour personnes malvoyantes, capable de :
-détecter des objets en temps réel via une webcam,
-annoncer vocalement les objets identifiés,
-afficher les objets détectés grâce à OpenCV.
-La solution repose sur TensorFlow 2, OpenCV, et un modèle pré-entraîné SSD MobileNet V2, optimisé pour la rapidité et la précision.
-Ce projet a été réalisé dans un cadre académique, dans le but de présenter un prototype fonctionnel devant un jury.
-🚀 Fonctionnalités principales
-🎥 Détection d’objets en temps réel
-Basée sur SSD MobileNet V2 COCO (90 classes : personne, voiture, téléphone…)
-Très rapide → idéale pour webcam
-Boîtes englobantes et labels affichés à l’écran
-🔊 Synthèse vocale automatique
-Lecture vocale des objets détectés
-Fonction anti-répétition intégrée
-Fonctionne entièrement offline via pyttsx3
-📦 Modèle embarqué
-Modèle TensorFlow 2 inclus dans ssd_mobilenet_v2/
-Aucune installation externe nécessaire
-🖥️ Scripts inclus
-object_detection_speaking.py → détection + voix
-object_detection_webcam.py → détection seule
-📁 Structure du projet
-
 Blind-Assistance-Object-Detection/
 │
 ├── object_detection_speaking.py # Détection + retour vocal
