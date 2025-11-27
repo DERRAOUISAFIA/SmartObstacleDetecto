@@ -1,131 +1,127 @@
-# 🌟 Blind Assistance — Real-Time Object Detection with Voice Feedback
-
-### *Projet académique — Vision par Ordinateur & Intelligence Artificielle*
-
----
-
-## 🧠 Description du Projet
-
-Ce projet propose un système d’assistance pour personnes malvoyantes capable de :
-
-- détecter des objets en temps réel via webcam,
-- annoncer vocalement les objets identifiés,
-- afficher les boîtes englobantes grâce à OpenCV.
-
-Il repose sur **TensorFlow 2**, **OpenCV**, et le modèle pré-entraîné **SSD MobileNet V2**.
-
-Développé dans le cadre d’un **projet académique**, il vise à présenter un prototype fonctionnel devant un jury.
-
----
-
-## 🚀 Fonctionnalités principales
-
-### 🎥 Détection d’objets en temps réel
-- Basée sur **SSD MobileNet V2 – COCO**
-- 90 classes d’objets supportées
-- Fonctionne en temps réel selon la machine
-
-### 🔊 Synthèse vocale automatique
-- Annonce vocale des objets détectés
-- Système anti-répétition pour éviter les interférences audio
-- Fonctionne entièrement hors-ligne (`pyttsx3`)
-
-### 📦 Modèle inclus dans le projet
-
-Le dossier `ssd_mobilenet_v2/` contient :
-- `saved_model.pb`
-- `variables/`
-
-Aucun téléchargement supplémentaire n’est requis.
-
-### 🖥 Scripts disponibles
-
-| Script                         | Fonction                        |
-|--------------------------------|---------------------------------|
-| `object_detection_speaking.py` | Détection + voix                |
-| `object_detection_webcam.py`   | Détection seule                 |
-
----
-
-## 📁 Structure du projet
-
-```text
-Blind-Assistance-Object-Detection/
+SmartObstacleDetector — Obstacle Detection Assistant for Visually Impaired Users
+1. Introduction
+SmartObstacleDetector is a real-time obstacle detection system designed to assist visually impaired users by identifying objects, estimating their distance and direction, and optionally providing intelligent voice alerts.
+The system uses TensorFlow + SSD MobileNet V2, supports webcam input, and includes modules for image detection, real-time video analysis, audio alerts, and model optimization.
+2. Features
+2.1 Real-Time Object Detection
+SSD MobileNet V2 pretrained on COCO dataset
+Detects up to 90 object classes
+Works on standard webcams
+Real-time bounding box rendering
+2.2 Voice Alerts (Final Prototype)
+Offline text-to-speech using pyttsx3
+Direction detection: left / center / right
+Distance estimation: near / far
+Anti-repetition with cooldown logic
+Natural-sounding French alerts
+2.3 Advanced Video Module
+Real-time distance estimation using focal length
+Color-coded bounding boxes (green/orange/red)
+FPS tracking
+Screenshot & video recording options
+2.4 Image Detection Module
+Runs object detection on static images
+Useful for debugging, testing, and validation
+2.5 Optimization Module
+Threshold and confidence tuning
+Performance evaluation
+Model comparison
+3. Team Responsibilities
+Member	File	Responsibilities
+Member 1 — Image Detection	src/images/detection_image.py	Load model, detect objects on images, draw bounding boxes
+Member 2 — Webcam Detection + Distance + FPS	src/webcam/test.py	Real-time detection, distance estimation, FPS tracking
+Member 3 — Voice Alerts (Final Prototype)	src/alerts/object_detection_speaking.py	Intelligent voice alerts, direction & distance logic, cooldown
+Member 4 — Optimization	src/optimization/optimization.py	Threshold tuning, performance evaluation, testing setups
+4. Project Structure
+```
+SmartObstacleDetector/
 │
-├── object_detection_speaking.py      # Détection + Voix
-├── object_detection_webcam.py        # Détection seule
+├── src/
+│   ├── images/
+│   │    └── detection_image.py
+│   ├── webcam/
+│   │    └── test.py
+│   ├── alerts/
+│   │    └── object_detection_speaking.py
+│   ├── optimization/
+│   │    └── optimization.py
+│   └── utils/
+│        └── common.py (optional)
 │
-├── ssd_mobilenet_v2/                 # Modèle TensorFlow 2
+├── ssd_mobilenet_v2/
 │   ├── saved_model.pb
 │   └── variables/
-│       ├── variables.data-00000-of-00001
-│       └── variables.index
 │
-├── requirements.txt                  # Dépendances
-└── README.md                         # Documentation
+├── requirements.txt
+└── README.md
 ```
-⚙️ Installation
+5. Installation
 
-🔷 1. Cloner le projet
+Step 1 — Clone the repository
 ```
-git clone https://github.com/DERRAOUISAFIA/SmartObstacleDetecto.git
-cd SmartObstacleDetecto
+git clone https://github.com/your-repo/SmartObstacleDetector.git
+cd SmartObstacleDetector
 ```
-🔷 2. Créer un environnement virtuel
+Step 2 — Create a virtual environment
 macOS / Linux
 ```
-python3 -m venv blindenv
-source blindenv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 ```
 Windows
 ```
-python -m venv blindenv
-blindenv\Scripts\activate
+python -m venv venv
+venv\Scripts\activate
 ```
-🔷 3. Installer les dépendances
+Step 3 — Install dependencies
 ```
 pip install -r requirements.txt
 ```
-▶️ Exécution
-
-🔊 Détection + Synthèse vocale
+6. Running the Project
+Final Prototype (Voice Alerts)
 ```
-python object_detection_speaking.py
+python src/alerts/object_detection_speaking.py
 ```
-🎥 Détection seule
+Image Detection Module
 ```
-python object_detection_webcam.py
+python src/images/detection_image.py
 ```
-❌ Quitter
+Webcam Detection + Distance + FPS
+```
+python src/webcam/test.py
+```
+Optimization Module
+```
+python src/optimization/optimization.py
+```
+7. Model Used
+    SSD MobileNet V2 (COCO)
+    90 object categories
+    Optimized for real-time inference
+    Pretrained model stored in:
+        ssd_mobilenet_v2/
+8. Technologies Used
+| Technology       | Purpose                 |
+| ---------------- | ----------------------- |
+| **TensorFlow 2** | Object detection        |
+| **OpenCV**       | Webcam/video processing |
+| **pyttsx3**      | Offline text-to-speech  |
+| **NumPy**        | Numerical operations    |
+| **Python 3.10+** | Programming language    |
 
-Dans la fenêtre vidéo : appuyer sur Q.
-
-🧬 Modèle utilisé
-
-SSD MobileNet V2 — COCO dataset (90 classes)
-Très rapide → idéal pour le temps réel
-Fonctionne sans GPU (CPU compatible)
-
-🛠️ Technologies utilisées
-
-    Technologie	Rôle
-    TensorFlow 2.15	Détection d’objets
-    OpenCV	Webcam + affichage
-    NumPy	Traitement numérique
-    pyttsx3	Synthèse vocale offline
-    Python 3.10+	Langage
-🧑‍🏫 Contexte académique
-
-Ce projet a été réalisé dans le cadre :
-d’un module d’intelligence artificielle,
-visant l’intégration de modèles pré-entraînés,
-la manipulation vidéo en temps réel,
-et l’assistance intelligente pour malvoyants.
-
-📌 Travaux futurs
-
-    📱 Application mobile
-    🧭 Détection de distance avec alertes
-    🔦 Reconnaissance de passages piétons
-    🌦️ Détection d'obstacles extérieurs
-    🤖 Intégration dans un dispositif portable
+9. Suggested Demo Flow (For Jury Presentation)
+        Introduction (Member 4)
+        Image detection demo (Member 1)
+        Real-time webcam detection + distance estimation (Member 2)
+        Final prototype with voice alerts (Member 3)
+        Conclusion & future improvements (Member 4)
+10. Future Improvements
+Mobile app version
+Staircase & pothole detection
+Ultrasonic/LiDAR fusion
+GPS navigation integration
+Haptic vibration feedback
+Wearable device prototype
+12. Conclusion
+This project demonstrates an effective assistive technology prototype by combining computer vision, real-time processing, distance estimation, and intelligent voice feedback to improve navigation for visually impaired users.
+It highlights strong teamwork and a practical understanding of AI systems.
