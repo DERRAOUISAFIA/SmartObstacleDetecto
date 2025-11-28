@@ -1,9 +1,10 @@
 # ======================
 # Core Dependencies
 # ======================
-tensorflow==2.15.0
-numpy==1.26.4
-protobuf==4.24.4
+tensorflow==2.20.0
+numpy>=2.0.0
+protobuf>=5.28.0
+
 Pillow
 matplotlib
 opencv-python
