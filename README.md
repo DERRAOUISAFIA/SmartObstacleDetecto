@@ -1,177 +1,210 @@
-SmartObstacleDetector — Obstacle Detection Assistant for Visually Impaired Users
+# SmartObstacleDetector — Assistant de Détection d’Obstacles pour Personnes Malvoyantes
 
-1. Introduction
-SmartObstacleDetector is a real-time obstacle detection system designed to assist visually impaired users by identifying objects, estimating their distance and direction, and optionally providing intelligent voice alerts.
-The system uses TensorFlow + SSD MobileNet V2, supports webcam input, and includes modules for image detection, real-time video analysis, audio alerts, and model optimization.
+## 📌 1. Introduction
 
-2. Features
-   
-2.1 Real-Time Object Detection
-   
-  SSD MobileNet V2 pretrained on COCO dataset  
+SmartObstacleDetector est un système d’assistance visuelle conçu pour aider les personnes malvoyantes à se déplacer en toute sécurité.  
+Il détecte les obstacles en temps réel, estime leur distance et leur direction, et peut annoncer vocalement les dangers.
 
-  Detects up to 90 object classes  
+Le projet comprend **deux générations de prototypes** :
 
-  Works on standard webcams  
+### 🔹 Prototype 1 — SSD MobileNet V2 (TensorFlow)
+- Détection en temps réel  
+- Distance + direction  
+- Module vocal simple  
+- Version de base pour étude comparative  
 
-  Real-time bounding box rendering  
+### 🔹 Prototype 2 — YOLOv8 (Version Finale)
+- Détection **ultra-précise et rapide**  
+- 10 à 30 FPS sur webcam  
+- Alerte vocale intelligente en français  
+- Stabilité améliorée  
+- Meilleure gestion des distances / directions / re-détection  
 
-2.2 Voice Alerts (Final Prototype)  
+Ce README documente l’architecture finale du projet.
 
-  Offline text-to-speech using pyttsx3  
+---
 
-  Direction detection: left / center / right  
+## ⭐ 2. Fonctionnalités Principales
 
-  Distance estimation: near / far  
+### 🟩 2.1 Détection d’Objets en Temps Réel (YOLOv8 — Version Finale)
 
-  Anti-repetition with cooldown logic  
+- Détection rapide et fiable  
+- Très haute précision  
+- Fonctionne sur webcam, caméras USB et vidéos  
+- Suivi d’objets prioritaires :  
+  **personne, voiture, camion, moto, autobus, chien, chat, panneau stop, feu tricolore**
 
-  Natural-sounding French alerts  
+#### 🟩 Couleurs des boîtes :
+- 🟥 **Rouge** : danger — objet très proche  
+- 🟧 **Orange** : distance moyenne  
+- 🟩 **Vert** : zone sûre  
+
+---
+
+### 🟦 2.2 Alerte Vocale Intelligente (Final YOLO)
+
+Module vocal **hors-ligne**, en français, basé sur `pyttsx3`.
+
+Fonctionnalités :
+- Détection directionnelle :  
+  **“à gauche”**, **“à droite”**, **“devant”**
+- Estimation de distance :  
+  **“proche / loin”**
+- Mouvements :  
+  **“Il se rapproche”**, **“Il s’éloigne”**
+- Anti-spam vocal intelligent  
+- Réinitialisation automatique lors de la disparition  
+- Re-détection instantanée  
+
+> 🎤 **C’est le module principal à présenter au jury**
+
+---
+
+### 🟧 2.3 Modules MobileNet (Prototype 1)
+
+Toujours inclus pour comparaison académique :
+
+- Détection webcam  
+- Estimation de distance (via focale)  
+- Capture écran / vidéo  
+- Analyse d’image fixe  
+- Module vocal basique  
+- Optimisation FPS & seuils  
+
+---
+
+### 🟨 2.4 Module de Détection d’Images (YOLO + MobileNet)
+
+- Analyse de photos  
+- Affichage des bounding boxes  
+- Tests pour valider le modèle  
+- Compatible avec les deux architectures  
+
+---
+
+### 🟪 2.5 Module d’Optimisation
+
+- Comparaison : YOLO vs MobileNet  
+- Test des seuils de confiance  
+- Analyse de performances  
+- Benchmark complet  
+
+---
+
+## 👥 3. Répartition du Travail
+
+| Membre | Fichier | Rôle |
+|-------|---------|------|
+| **Membre 1 — Détection Image** | `src/images/detection_image.py` | Détection sur image, visualisation |
+| **Membre 2 — Webcam + Distance** | `src/webcam/test.py` | Détection temps réel, estimation distance, FPS |
+| **Membre 3 — Module Vocal (Version Finale)** | `src/yolo/yolo_speaking.py` | Alerte vocale intelligente |
+| **Membre 4 — Optimisation** | `src/optimization/optimization.py` | Analyse, tuning, comparaison modèles |
+
+---
+
+## 🗂️ 4. Structure du Projet
 
 
-2.3 Advanced Video Module  
 
-
-  Real-time distance estimation using focal length  
-
-  Color-coded bounding boxes (green/orange/red)  
-
-  FPS tracking  
-
-  Screenshot & video recording options  
-
-2.4 Image Detection Module  
-
-
-  Runs object detection on static images  
-
-  Useful for debugging, testing, and validation  
-
-
-2.5 Optimization Module  
-
-  Threshold and confidence tuning  
-
-  Performance evaluation  
-
-  Model comparison  
-
-5. Team Responsibilities
-   
-Member	File	Responsibilities
-Member 1 — Image Detection	src/images/detection_image.py	Load model, detect objects on images, draw bounding boxes  
-
-Member 2 — Webcam Detection + Distance + FPS	src/webcam/test.py	Real-time detection, distance estimation, FPS tracking  
-
-Member 3 — Voice Alerts (Final Prototype)	src/alerts/object_detection_speaking.py	Intelligent voice alerts, direction & distance logic, cooldown  
-
-Member 4 — Optimization	src/optimization/optimization.py	Threshold tuning, performance evaluation, testing setups    
-
-
-7. Project Structure
-```
 SmartObstacleDetector/
 │
 ├── src/
-│   ├── images/
-│   │    └── detection_image.py
-│   ├── webcam/
-│   │    └── test.py
-│   ├── alerts/
-│   │    └── object_detection_speaking.py
-│   ├── optimization/
-│   │    └── optimization.py
-│   └── utils/
-│        └── common.py (optional)
+│ ├── yolo/ # Version finale YOLO
+│ │ ├── yolo_utils.py
+│ │ ├── yolo_image.py
+│ │ ├── yolo_webcam.py
+│ │ └── yolo_speaking.py
+│ │
+│ ├── alerts/ # Ancienne version vocale
+│ │ └── object_detection_speaking_old.py
+│ │
+│ ├── images/
+│ │ └── detection_image.py
+│ │
+│ ├── webcam/
+│ │ └── test.py
+│ │
+│ ├── utils/
+│ │ └── common.py
+│ │
+│ └── optimization/
+│ └── optimization.py
 │
-├── ssd_mobilenet_v2/
-│   ├── saved_model.pb
-│   └── variables/
+├── models/
+│ └── ssd_mobilenet_v2/
+│
+├── assets/ # Images, captures, GIFs (optionnel)
 │
 ├── requirements.txt
 └── README.md
-```
-5. Installation
 
-Step 1 — Clone the repository
-```
+---
+
+## ⚙️ 5. Installation
+
+### 1️⃣ Cloner le dépôt
+```bash
 git clone https://github.com/your-repo/SmartObstacleDetector.git
 cd SmartObstacleDetector
-```
-Step 2 — Create a virtual environment
+2️⃣ Créer un environnement virtuel
 macOS / Linux
-```
 python3 -m venv venv
 source venv/bin/activate
-```
 Windows
-```
 python -m venv venv
 venv\Scripts\activate
-```
-Step 3 — Install dependencies
-```
+3️⃣ Installer les dépendances
 pip install -r requirements.txt
-```
-6. Running the Project
-Final Prototype (Voice Alerts)
-```
-python src/alerts/object_detection_speaking.py
-```
-Image Detection Module
-```
+▶️ 6. Exécution du Projet
+🎥 Détection Webcam (YOLO — recommandé)
+python src/yolo/yolo_webcam.py
+🔊 Détection + Alerte Vocale (YOLO)
+python src/yolo/yolo_speaking.py
+🖼 Détection d’Images (YOLO)
+python src/yolo/yolo_image.py
+📌 Prototype MobileNet (ancienne version)
+Module vocal :
+python src/alerts/object_detection_speaking_old.py
+Détection image :
 python src/images/detection_image.py
-```
-Webcam Detection + Distance + FPS
-```
+Détection webcam :
 python src/webcam/test.py
-```
-Optimization Module
-```
+Optimisation :
 python src/optimization/optimization.py
-```
-7. Model Used
-    SSD MobileNet V2 (COCO)
-    90 object categories
-    Optimized for real-time inference
-    Pretrained model stored in:
-        ssd_mobilenet_v2/
-8. Technologies Used
-   
-| Technology       | Purpose                 |
-| ---------------- | ----------------------- |
-| **TensorFlow 2** | Object detection        |
-| **OpenCV**       | Webcam/video processing |
-| **pyttsx3**      | Offline text-to-speech  |
-| **NumPy**        | Numerical operations    |
-| **Python 3.10+** | Programming language    |
-
-
-9. Suggested Demo Flow (For Jury Presentation):
-    
-        Introduction (Member 4)
-   
-        Image detection demo (Member 1)
-   
-        Real-time webcam detection + distance estimation (Member 2)
-    
-        Final prototype with voice alerts (Member 3)
-   
-        Conclusion & future improvements (Member 4)
-   
-11. Future Improvements Mobile app version
-
-Staircase & pothole detection  
-
-Ultrasonic/LiDAR fusion  
-
-GPS navigation integration  
-
-Haptic vibration feedback  
-
-Wearable device prototype  
-
-13. Conclusion
-    
-This project demonstrates an effective assistive technology prototype by combining computer vision, real-time processing, distance estimation, and intelligent voice feedback to improve navigation for visually impaired users.
-It highlights strong teamwork and a practical understanding of AI systems.
+🤖 7. Modèles Utilisés
+🚀 YOLOv8 (Version Finale)
+Fichier : yolov8n.pt
+Très rapide (temps réel)
+Compatible CPU
+📦 SSD MobileNet V2 (Prototype 1)
+Pré-entraîné sur COCO (90 classes)
+Faible consommation de ressources
+🛠️ 8. Technologies Utilisées
+Technologie	Rôle
+YOLOv8	Détection avancée
+TensorFlow 2	Prototype MobileNet
+OpenCV	Webcam / Vidéo
+pyttsx3	Synthèse vocale hors-ligne
+NumPy	Calcul
+Python 3.10+	Langage
+🎤 9. Déroulement de la Présentation (Jury)
+Introduction — Membre 4
+Prototype 1 : Détection d’Images — Membre 1
+Prototype 1 : Webcam + Distance — Membre 2
+Prototype 2 : YOLO Vocal — Membre 3
+Comparaison modèles & Optimisation — Membre 4
+Conclusion & perspectives
+🔮 10. Améliorations Futures
+✔ Application mobile
+✔ Détection d’escaliers / trous
+✔ Capteurs (Ultrasonic, LiDAR)
+✔ Navigation GPS
+✔ Retour haptique (vibrations)
+✔ Version wearable (lunettes, gilet, canne intelligente)
+🧾 11. Conclusion
+SmartObstacleDetector combine Computer Vision, Intelligence Artificielle et synthèse vocale pour créer un assistant de navigation fiable pour les personnes malvoyantes.
+L’évolution du projet — de SSD MobileNet à YOLOv8 — montre une progression technologique solide vers un système plus précis, plus rapide et plus réaliste.
+Ce projet reflète :
+✔ un travail d’équipe efficace
+✔ la maîtrise des outils IA modernes
+✔ une vraie vision d’assistance réelle
