@@ -5,10 +5,10 @@ import cv2
 import os
 import sys
 import time
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 sys.path.append(PROJECT_ROOT)
-
 
 # ===============================
 #  Synthèse vocale
@@ -17,20 +17,37 @@ engine = pyttsx3.init()
 engine.setProperty("rate", 170)
 engine.setProperty("volume", 1.0)
 
-
 def speak(text):
     print("🗣️", text)
     engine.say(text)
     engine.runAndWait()
 
-
 # ===============================
-#  Distance + direction
+#  Largeurs réelles (mètres)
 # ===============================
-def estimate_distance(top, bottom, h):
-    bbox_h = bottom - top
-    return max(0.1, 1 - bbox_h / h)
+OBJECT_WIDTHS = {
+    "person": 0.50,
+    "bottle": 0.07,
+    "chair": 0.45,
+    "cup": 0.08,
+    "dog": 0.30,
+    "cat": 0.25,
+    "car": 1.75,
+    "truck": 2.40,
+    "bus": 2.80,
+    "motorcycle": 0.85,
+    "stop sign": 0.75,
+    "traffic light": 0.32,
+}
 
+FOCAL_LENGTH = 900
+
+def estimate_distance_meters(width_pixel, obj_name):
+    if obj_name not in OBJECT_WIDTHS:
+        return None
+    real_width = OBJECT_WIDTHS[obj_name]
+    distance = (real_width * FOCAL_LENGTH) / (width_pixel + 0.01)
+    return round(distance, 2)
 
 def estimate_direction(left, right, w):
     cx = (left + right) / 2
@@ -41,30 +58,8 @@ def estimate_direction(left, right, w):
     else:
         return "devant"
 
-
-# ===============================
-#  Classes utiles pour malvoyants
-# ===============================
-USEFUL_CLASSES = [
-    "person", "car", "truck", "bus", "motorcycle",
-    "stop sign", "traffic light",
-    "dog", "cat",
-]
-
-
-# Traduction FR
-TRANSLATE = {
-    "person": "personne",
-    "car": "voiture",
-    "truck": "camion",
-    "bus": "bus",
-    "motorcycle": "moto",
-    "stop sign": "panneau stop",
-    "traffic light": "feu tricolore",
-    "dog": "chien",
-    "cat": "chat",
-}
-
+def translate(name):
+    return name.replace("_", " ").lower()
 
 # ===============================
 #  Boucle principale
@@ -78,16 +73,10 @@ def main():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-    last_message = ""
     last_time = 0
-    last_distance = None
-    missing_frames = 0
+    COOLDOWN = 2
 
-    COOLDOWN = 1.5
-    DANGER_REPEAT = 2.5
-    APPROACH_THRESHOLD = 0.12  # 12 % différence de distance
-
-    print("🟢 YOLOv8 – Mode vocal PRO (Q pour quitter)")
+    print("🟢 YOLOv8 – Option B (danger + autres objets)")
 
     while True:
         ret, frame = cap.read()
@@ -95,81 +84,71 @@ def main():
             continue
 
         h, w, _ = frame.shape
-        detections = yolo_detect(model, frame, conf=0.35)
+        detections = yolo_detect(model, frame, conf=0.45)
 
-        # Filtrer seulement les objets utiles
-        usable = [d for d in detections if d["name"] in USEFUL_CLASSES]
-
-        if not usable:
-            missing_frames += 1
-            if missing_frames > 8:
-                last_message = ""
+        if not detections:
             continue
-        else:
-            missing_frames = 0
 
-        # Prendre l’objet le plus proche / dangereux
-        best = None
-        best_score = -1
-
-        for d in usable:
+        objects = []
+        for d in detections:
             name = d["name"]
             l, t, r, b = d["box"]
-            dist = estimate_distance(t, b, h)
+            width_px = r - l
             conf = d["conf"]
 
-            score = (1.3 - dist) + conf
-            if score > best_score:
-                best_score = score
-                best = (name, l, t, r, b, dist)
+            dist_m = estimate_distance_meters(width_px, name)
+            if dist_m is None:
+                continue
 
-        if best is None:
+            direction = estimate_direction(l, r, w)
+            proximity = "proche" if dist_m < 1.2 else "loin"
+            fr_name = translate(name)
+
+            objects.append({
+                "name": fr_name,
+                "dist": dist_m,
+                "dir": direction,
+                "prox": proximity,
+                "box": (l, t, r, b)
+            })
+
+        if not objects:
             continue
 
-        name, l, t, r, b, dist = best
-        direction = estimate_direction(l, r, w)
+        # 1️⃣ Trouver l’objet le plus dangereux (le plus proche)
+        objects.sort(key=lambda x: x["dist"])
+        danger = objects[0]
 
-        name_fr = TRANSLATE.get(name, name)
-        dist_text = "proche" if dist < 0.4 else "loin"
-        message = f"{name_fr} {direction}, {dist_text}"
+        # Phrase danger
+        msg_danger = f"{danger['name']} {danger['dir']} à {danger['dist']} mètre, {danger['prox']}"
+
+        # 2️⃣ Les autres objets
+        others = objects[1:]
+        msg_others = ""
+
+        if len(others) > 0:
+            short_list = ", ".join([f"{o['name']} {o['dir']}" for o in others[:3]])
+            msg_others = f"Aussi : {short_list}"
 
         now = time.time()
+        if (now - last_time) > COOLDOWN:
+            speak(msg_danger)
+            if msg_others:
+                speak(msg_others)
+            last_time = now
 
-        # Première annonce ou réapparition
-        if last_message == "":
-            speak(message)
-            last_message, last_time, last_distance = message, now, dist
+        # =========================
+        #  Affichage visuel
+        # =========================
+        for obj in objects:
+            l, t, r, b = obj["box"]
+            color = (0, 255, 0) if obj["dist"] > 2 else (0, 165, 255) if obj["dist"] > 1 else (0, 0, 255)
+            cv2.rectangle(frame, (l, t), (r, b), color, 2)
+            cv2.putText(frame,
+                        f"{obj['name']} {obj['dist']}m",
+                        (l, t - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-        # Rapprochement / éloignement
-        elif last_distance is not None and abs(dist - last_distance) > APPROACH_THRESHOLD:
-            if dist < last_distance:
-                speak("Il se rapproche")
-            else:
-                speak("Il s'éloigne")
-            speak(message)
-            last_message, last_time, last_distance = message, now, dist
-
-        # Danger répété
-        elif dist < 0.4 and (now - last_time) > DANGER_REPEAT:
-            speak(message)
-            last_message, last_time, last_distance = message, now, dist
-
-        # Cooldown normal
-        elif (now - last_time) > COOLDOWN:
-            speak(message)
-            last_message, last_time, last_distance = message, now, dist
-
-        else:
-            last_distance = dist
-
-        # Affichage
-        color = (0, 255, 0) if dist > 0.5 else (
-            0, 165, 255) if dist > 0.3 else (0, 0, 255)
-        cv2.rectangle(frame, (l, t), (r, b), color, 2)
-        cv2.putText(frame, message, (l, t - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
-
-        cv2.imshow("YOLO Voice Assist", frame)
+        cv2.imshow("YOLO Voice Assist – Option B", frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
