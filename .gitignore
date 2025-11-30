@@ -11,6 +11,14 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+models/
+*.pb
+*.ckpt
+*.pt
+*.data-00000-of-00001
+*.index
+
+
 # Model weights
 *.pt
 *.onnx
