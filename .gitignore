@@ -1,56 +1,20 @@
 # Python
 venv/
-blindenv/
-env/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
 
-# OS
+# MacOS
 .DS_Store
-Thumbs.db
 
-models/
-*.pb
-*.ckpt
-*.pt
-*.data-00000-of-00001
-*.index
-
-
-# Model weights
-*.pt
-*.onnx
+# Model Exports (if generated)
 *.tflite
-*.pb
-*.engine
-*.TRT
-*.weights
 
-# Checkpoints / training logs
-runs/
-logs/
-checkpoints/
-
-# Images / videos (generated or testing)
-*.jpg
-*.jpeg
-*.png
-*.bmp
-*.gif
+# Videos / screenshots
 *.avi
 *.mp4
-*.mov
+*.jpg
+*.png
 
-# Jupyter / IPython
-.ipynb_checkpoints/
-*.ipynb
-
-# IDE / Editor
+# IDE
 .vscode/
 .idea/
-
-# Cache
-.cache/
-*.cache
