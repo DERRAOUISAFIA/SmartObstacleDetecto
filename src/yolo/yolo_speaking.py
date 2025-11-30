@@ -5,10 +5,9 @@ import cv2
 import os
 import sys
 import time
+import threading
+speak_lock = threading.Lock()
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
-sys.path.append(PROJECT_ROOT)
 
 # ===============================
 #  Synthèse vocale
@@ -18,12 +17,17 @@ engine.setProperty("rate", 170)
 engine.setProperty("volume", 1.0)
 
 def speak(text):
-    print("🗣️", text)
-    engine.say(text)
-    engine.runAndWait()
+    with speak_lock:  # ⬅️ empêche plusieurs voix en même temps
+        print("🗣️", text)
+        engine.say(text)
+        engine.runAndWait()
+
+
+def speak_async(text):
+    threading.Thread(target=speak, args=(text,), daemon=True).start()
 
 # ===============================
-#  Largeurs réelles (mètres)
+#  Base de données des tailles réelles
 # ===============================
 OBJECT_WIDTHS = {
     "person": 0.50,
@@ -42,12 +46,12 @@ OBJECT_WIDTHS = {
 
 FOCAL_LENGTH = 900
 
-def estimate_distance_meters(width_pixel, obj_name):
+def estimate_distance_meters(width_px, obj_name):
     if obj_name not in OBJECT_WIDTHS:
         return None
-    real_width = OBJECT_WIDTHS[obj_name]
-    distance = (real_width * FOCAL_LENGTH) / (width_pixel + 0.01)
-    return round(distance, 2)
+    real_w = OBJECT_WIDTHS[obj_name]
+    distance = (real_w * FOCAL_LENGTH) / (width_px + 0.01)
+    return max(0.1, round(distance, 2))
 
 def estimate_direction(left, right, w):
     cx = (left + right) / 2
@@ -55,8 +59,7 @@ def estimate_direction(left, right, w):
         return "à gauche"
     elif cx > w * 0.66:
         return "à droite"
-    else:
-        return "devant"
+    return "devant"
 
 def translate(name):
     return name.replace("_", " ").lower()
@@ -73,10 +76,17 @@ def main():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-    last_time = 0
-    COOLDOWN = 2
+    if not cap.isOpened():
+        print("❌ Webcam non détectée.")
+        return
 
-    print("🟢 YOLOv8 – Option B (danger + autres objets)")
+    print("🟢 YOLOv8 – Assistant vocal optimisé")
+
+    last_message = ""
+    last_dist_record = {}
+    APPROACH_THRESHOLD = 0.15    # plus sensible et plus réaliste
+    COOLDOWN = 0.9               # vitesse parfaite sans spam
+    last_time = 0
 
     while True:
         ret, frame = cap.read()
@@ -94,63 +104,83 @@ def main():
             name = d["name"]
             l, t, r, b = d["box"]
             width_px = r - l
-            conf = d["conf"]
 
             dist_m = estimate_distance_meters(width_px, name)
             if dist_m is None:
                 continue
 
-            direction = estimate_direction(l, r, w)
-            proximity = "proche" if dist_m < 1.2 else "loin"
             fr_name = translate(name)
+            direction = estimate_direction(l, r, w)
+            prox = "proche" if dist_m < 1.2 else "loin"
 
             objects.append({
                 "name": fr_name,
                 "dist": dist_m,
                 "dir": direction,
-                "prox": proximity,
+                "prox": prox,
                 "box": (l, t, r, b)
             })
 
         if not objects:
             continue
 
-        # 1️⃣ Trouver l’objet le plus dangereux (le plus proche)
+        # 1️⃣ Choisir l’objet le plus dangereux (le plus proche)
         objects.sort(key=lambda x: x["dist"])
         danger = objects[0]
 
-        # Phrase danger
-        msg_danger = f"{danger['name']} {danger['dir']} à {danger['dist']} mètre, {danger['prox']}"
+        name = danger["name"]
+        dist = round(danger["dist"], 1)  # distance arrondie
+        dir = danger["dir"]
 
-        # 2️⃣ Les autres objets
-        others = objects[1:]
-        msg_others = ""
+        # Message de base
+        msg = f"{name} {dir}, à {dist} mètre, {danger['prox']}"
 
+        # 2️⃣ Détection des mouvements (rapprochement / éloignement)
+        last_dist = last_dist_record.get(name, None)
+        if last_dist is not None:
+            if abs(dist - last_dist) >= 0.2:
+                if dist < last_dist:
+                    msg += ". Attention, il se rapproche"
+                else:
+                    msg += ". Il s'éloigne"
+
+        last_dist_record[name] = dist
+
+        # 3️⃣ Ajouter autres objets (max 3)
+        others = objects[1:4]
         if len(others) > 0:
-            short_list = ", ".join([f"{o['name']} {o['dir']}" for o in others[:3]])
-            msg_others = f"Aussi : {short_list}"
+            other_text = ", ".join([f"{o['name']} {o['dir']}" for o in others])
+            msg += f". Aussi : {other_text}"
 
+        # 4️⃣ Anti-spam intelligent + voix non bloquante
         now = time.time()
-        if (now - last_time) > COOLDOWN:
-            speak(msg_danger)
-            if msg_others:
-                speak(msg_others)
+        # ⬇️ Toujours annoncer la phrase complète toutes les 1.5 secondes
+        if (now - last_time) > 1.5:
+            speak_async(msg)
+            last_message = msg
+            last_time = now
+            # ⬇️ Annoncer immédiatement si le message a changé
+        elif msg != last_message:
+            speak_async(msg)
+            last_message = msg
             last_time = now
 
+
         # =========================
-        #  Affichage visuel
+        #  VISUEL
         # =========================
         for obj in objects:
             l, t, r, b = obj["box"]
-            color = (0, 255, 0) if obj["dist"] > 2 else (0, 165, 255) if obj["dist"] > 1 else (0, 0, 255)
+            color = (0, 255, 0) if obj["dist"] > 2 else \
+                    (0, 165, 255) if obj["dist"] > 1 else (0, 0, 255)
             cv2.rectangle(frame, (l, t), (r, b), color, 2)
             cv2.putText(frame,
                         f"{obj['name']} {obj['dist']}m",
                         (l, t - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-        cv2.imshow("YOLO Voice Assist – Option B", frame)
+        cv2.imshow("YOLO Voice Assist – Optimisé", frame)
 
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
