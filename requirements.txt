@@ -1,0 +1,20 @@
+# ======================
+# Core Dependencies
+# ======================
+tensorflow==2.20.0
+numpy>=2.0.0
+protobuf>=5.28.0
+
+Pillow
+matplotlib
+opencv-python
+
+# ======================
+# Speech (text-to-speech)
+# ======================
+pyttsx3
+
+# ======================
+# Optional (used in notebooks)
+# ======================
+jupyter

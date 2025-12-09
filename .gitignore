@@ -1,0 +1,20 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# MacOS
+.DS_Store
+
+# Model Exports (if generated)
+*.tflite
+
+# Videos / screenshots
+*.avi
+*.mp4
+*.jpg
+*.png
+
+# IDE
+.vscode/
+.idea/
