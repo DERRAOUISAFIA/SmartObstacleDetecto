@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+
 # SmartObstacleDetector — Assistant de Détection d’Obstacles pour Personnes Malvoyantes
 
 # 🔧 Utilisation de l'interface de détection
