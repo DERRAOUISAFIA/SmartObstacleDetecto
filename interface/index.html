@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interface Détection IA</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Détection d'objets IA 🔎</h1>
+    <p class="welcome-text">
+      👋 Bienvenue sur votre détecteur d'objets IA ! Cliquez sur
+      <strong>Commencer la détection</strong> pour activer l'intelligence
+      artificielle et commencer l’analyse en temps réel.
+    </p>
+
+    <div class="container">
+      <div class="mode-selector">
+        <label for="mode">🧠 Choisir le mode de détection :</label>
+        <select id="mode">
+          <option value="yolo">Détection YOLO</option>
+          <option value="speaking">Détection avec SSD</option>
+        </select>
+      </div>
+
+      <button id="startBtn">🚀 Commencer la détection</button>
+      <button id="stopBtn">🛑 Arrêter la détection</button>
+      <p id="status"><span class="status-dot"></span> En attente...</p>
+    </div>
+
+    <script src="script.js"></script>
+
+    <footer class="footer">
+      <p>💡 Projet de détection d'objets IA</p>
+      <p>© 2025 - Tous droits réservés</p>
+    </footer>
+
+    <div class="clock-container">
+      Heure actuelle : <span id="clock">--:--:--</span>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,8 @@
 # src/yolo/yolo_speaking.py
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+
 from src.yolo.yolo_utils import load_yolo, yolo_detect
 import pyttsx3
 import cv2
