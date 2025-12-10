@@ -1,3 +1,5 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 import time
 import threading
 import math
@@ -12,6 +14,18 @@ from voice_feedback import VoiceFeedback
 print("="*50)
 print("SYSTEME DE DETECTION D'OBJETS AVEC FEEDBACK VOCAL")
 print("="*50)
+
+# --- LECTURE DE LA SOURCE CAMERA AVEC sys.argv ---
+# server.py lance :  python test_opencv.py pc   OU   python test_opencv.py phone
+
+if len(sys.argv) > 1:
+    cam_mode = sys.argv[1].lower()
+else:
+    cam_mode = "pc"   # valeur par défaut
+
+print(f"📸 Source caméra reçue depuis serveur : {cam_mode}")
+
+use_phone_cam = cam_mode == "phone"
 
 # --- YOLO ---
 print("[1/4] Chargement du modèle YOLO...")
@@ -30,17 +44,21 @@ print("✓ Estimateur prêt")
 
 # --- Caméra ---
 print("[4/4] Ouverture de la caméra...")
-use_phone_cam = input("Utiliser caméra téléphone ? (o/n) : ").lower() == "o"
 
 cap = None
+
 if use_phone_cam:
-    phone_ip = input("Entrez l'URL du flux vidéo du téléphone (ex: http://192.168.1.10:8080/video) : ")
+    # URL envoyée par ton interface dans le futur (si tu veux)
+    # pour l’instant on met une valeur par défaut, modifiable :
+    phone_ip = "http://192.168.1.10:8080/video"
+    print(f"Connexion à la caméra téléphone via {phone_ip}")
     cap = cv2.VideoCapture(phone_ip)
     if cap.isOpened():
         print(f"✓ Flux caméra téléphone ouvert : {phone_ip}")
     else:
         print("✗ Impossible d’ouvrir le flux du téléphone")
         exit()
+
 else:
     camera_indices = [0, 1, 2]
     for idx in camera_indices:
@@ -155,4 +173,3 @@ finally:
     print(f"  Objets détectés: {objects_detected_total}")
     print(f"  FPS moyen: {frame_count/max(1, time.time()-start_time):.1f}")
     print("PROGRAMME TERMINÉ")
- 

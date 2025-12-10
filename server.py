@@ -11,32 +11,42 @@ PYTHON_PATH = r"C:\Users\Lenovo\Desktop\Python IA\SmartObstacleDetecto\blindenv\
 process = None
 process_lock = threading.Lock()
 
-def run_script(script_path):
+def run_script(script_path, cam_source):
     global process
     with process_lock:
         if process is None:
-            print(f"🔧 Lancement du script : {script_path}")
-            process = subprocess.Popen([PYTHON_PATH, script_path])
+            print(f"🔧 Lancement de {script_path} avec caméra : {cam_source}")
+            process = subprocess.Popen([PYTHON_PATH, script_path, cam_source])
         else:
             print("⚠️ Un processus est déjà en cours !")
 
+
 @app.route("/start", methods=["POST"])
 def start_detection():
-    data = request.get_json()
-    print("🚨 Données reçues :", data)  # ← TRACE ICI
+    try:
+        data = request.get_json(force=True)
+        mode = data.get("mode")
+        cam_source = data.get("cam", "pc")  # valeur par défaut = PC
 
-    mode = data.get("mode") if data else None
+        if mode == "yolo":
+            script = "src/yolo/yolo_speaking.py"
+        elif mode == "speaking":
+            script = "src/alerts/object_detection_speaking.py"
+        elif mode == "yolo11":
+            script = "test_opencv.py"
+        else:
+            return "❌ Mode invalide", 400
 
-    if mode == "yolo":
-        script = "src/yolo/yolo_speaking.py"
-    elif mode == "speaking":
-        script = "src/alerts/object_detection_speaking.py"
-    else:
-        print("❌ Mode invalide reçu :", mode)
-        return "❌ Mode invalide", 400
+        # Lancer le script avec argument caméra
+        threading.Thread(
+            target=run_script, args=(script, cam_source), daemon=True
+        ).start()
+        return f"Mode {mode} lancé avec caméra : {cam_source}", 200
 
-    threading.Thread(target=run_script, args=(script,), daemon=True).start()
-    return f"Mode {mode} lancé !", 200
+    except Exception as e:
+        print("❌ Erreur serveur :", str(e))
+        return "❌ Erreur serveur", 500
+
 
 
 @app.route("/stop")

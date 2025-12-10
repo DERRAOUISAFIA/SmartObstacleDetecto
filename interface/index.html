@@ -19,7 +19,15 @@
         <select id="mode">
           <option value="yolo">Détection YOLO</option>
           <option value="speaking">Détection avec SSD</option>
+          <option value="yolo11">Détection YOLO11</option>
         </select>
+        <div class="cam-source">
+          <label>🎥 Source caméra :</label>
+          <input type="radio" name="cam" value="phone" id="camPhone" checked />
+          <label for="camPhone">Téléphone</label>
+          <input type="radio" name="cam" value="pc" id="camPC" />
+          <label for="camPC">Ordinateur</label>
+        </div>
       </div>
 
       <button id="startBtn">🚀 Commencer la détection</button>

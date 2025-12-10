@@ -11,7 +11,8 @@ function logAction(message) {
 // --- START bouton ---
 document.getElementById("startBtn").addEventListener("click", () => {
   const status = document.getElementById("status");
-  const mode = document.getElementById("mode").value; // récupère le mode choisi
+  const mode = document.getElementById("mode").value;
+  const camSource = document.querySelector('input[name="cam"]:checked').value;
 
   status.innerHTML =
     '<span class="status-dot" style="background-color: orange;"></span> 🧠 Lancement de la détection (' +
@@ -24,6 +25,7 @@ document.getElementById("startBtn").addEventListener("click", () => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ mode: mode }),
+    body: JSON.stringify({ mode: mode, cam: camSource }),
   })
     .then((res) => {
       if (!res.ok) throw new Error("HTTP " + res.status);
