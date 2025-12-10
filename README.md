@@ -1,24 +1,45 @@
 # SmartObstacleDetector — Assistant de Détection d’Obstacles pour Personnes Malvoyantes
 
+# 🔧 Utilisation de l'interface de détection
+
+1. Assurez-vous d’avoir tous les fichiers du projet sur votre machine (interface, scripts Python, etc.).
+
+2. Ouvrez un terminal dans le dossier du projet, puis lancez le serveur Flask avec la commande suivante :
+
+````bash
+python server.py
+
+Ouvrez le fichier index.html dans votre navigateur (double-clic ou clic droit → "Ouvrir avec").
+
+Dans l’interface :
+
+Sélectionnez un mode de détection dans la liste (YOLO, SSD, YOLO11…)
+
+Choisissez la source de caméra : Ordinateur 💻 ou Téléphone 📱
+
+Cliquez sur 🚀 Commencer la détection
+
+Pour arrêter la détection, cliquez sur 🛑 Arrêter la détection
+
 ## 📌 1. Introduction
 
-SmartObstacleDetector est un système d’assistance visuelle conçu pour aider les personnes malvoyantes à se déplacer en toute sécurité.  
+SmartObstacleDetector est un système d’assistance visuelle conçu pour aider les personnes malvoyantes à se déplacer en toute sécurité.
 Il détecte les obstacles en temps réel, estime leur distance et leur direction, et peut annoncer vocalement les dangers.
 
 Le projet comprend **deux générations de prototypes** :
 
 ### 🔹 Prototype 1 — SSD MobileNet V2 (TensorFlow)
-- Détection en temps réel  
-- Distance + direction  
-- Module vocal simple  
-- Version de base pour étude comparative  
+- Détection en temps réel
+- Distance + direction
+- Module vocal simple
+- Version de base pour étude comparative
 
 ### 🔹 Prototype 2 — YOLOv8 (Version Finale)
-- Détection **ultra-précise et rapide**  
-- 10 à 30 FPS sur webcam  
-- Alerte vocale intelligente en français  
-- Stabilité améliorée  
-- Meilleure gestion des distances / directions / re-détection  
+- Détection **ultra-précise et rapide**
+- 10 à 30 FPS sur webcam
+- Alerte vocale intelligente en français
+- Stabilité améliorée
+- Meilleure gestion des distances / directions / re-détection
 
 Ce README documente l’architecture finale du projet.
 
@@ -28,16 +49,16 @@ Ce README documente l’architecture finale du projet.
 
 ### 🟩 2.1 Détection d’Objets en Temps Réel (YOLOv8 — Version Finale)
 
-- Détection rapide et fiable  
-- Très haute précision  
-- Fonctionne sur webcam, caméras USB et vidéos  
-- Suivi d’objets prioritaires :  
+- Détection rapide et fiable
+- Très haute précision
+- Fonctionne sur webcam, caméras USB et vidéos
+- Suivi d’objets prioritaires :
   **personne, voiture, camion, moto, autobus, chien, chat, panneau stop, feu tricolore**
 
 #### 🟩 Couleurs des boîtes :
-- 🟥 **Rouge** : danger — objet très proche  
-- 🟧 **Orange** : distance moyenne  
-- 🟩 **Vert** : zone sûre  
+- 🟥 **Rouge** : danger — objet très proche
+- 🟧 **Orange** : distance moyenne
+- 🟩 **Vert** : zone sûre
 
 ---
 
@@ -46,15 +67,15 @@ Ce README documente l’architecture finale du projet.
 Module vocal **hors-ligne**, en français, basé sur `pyttsx3`.
 
 Fonctionnalités :
-- Détection directionnelle :  
+- Détection directionnelle :
   **“à gauche”**, **“à droite”**, **“devant”**
-- Estimation de distance :  
+- Estimation de distance :
   **“proche / loin”**
-- Mouvements :  
+- Mouvements :
   **“Il se rapproche”**, **“Il s’éloigne”**
-- Anti-spam vocal intelligent  
-- Réinitialisation automatique lors de la disparition  
-- Re-détection instantanée  
+- Anti-spam vocal intelligent
+- Réinitialisation automatique lors de la disparition
+- Re-détection instantanée
 
 > 🎤 **C’est le module principal à présenter au jury**
 
@@ -64,30 +85,30 @@ Fonctionnalités :
 
 Toujours inclus pour comparaison académique :
 
-- Détection webcam  
-- Estimation de distance (via focale)  
-- Capture écran / vidéo  
-- Analyse d’image fixe  
-- Module vocal basique  
-- Optimisation FPS & seuils  
+- Détection webcam
+- Estimation de distance (via focale)
+- Capture écran / vidéo
+- Analyse d’image fixe
+- Module vocal basique
+- Optimisation FPS & seuils
 
 ---
 
 ### 🟨 2.4 Module de Détection d’Images (YOLO + MobileNet)
 
-- Analyse de photos  
-- Affichage des bounding boxes  
-- Tests pour valider le modèle  
-- Compatible avec les deux architectures  
+- Analyse de photos
+- Affichage des bounding boxes
+- Tests pour valider le modèle
+- Compatible avec les deux architectures
 
 ---
 
 ### 🟪 2.5 Module d’Optimisation
 
-- Comparaison : YOLO vs MobileNet  
-- Test des seuils de confiance  
-- Analyse de performances  
-- Benchmark complet  
+- Comparaison : YOLO vs MobileNet
+- Test des seuils de confiance
+- Analyse de performances
+- Benchmark complet
 
 ---
 
@@ -208,3 +229,4 @@ Ce projet reflète :
 ✔ un travail d’équipe efficace
 ✔ la maîtrise des outils IA modernes
 ✔ une vraie vision d’assistance réelle
+````
